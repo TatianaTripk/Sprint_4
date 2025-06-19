@@ -1,5 +1,7 @@
 package ru.praktikum.tests;
-import org.junit.*;
+
+import org.junit.Rule;
+import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -11,12 +13,15 @@ import ru.praktikum.util.EnvConfig;
 import java.time.Duration;
 
 import static org.junit.Assert.assertEquals;
+import static ru.praktikum.util.EnvConfig.BASE_URL;
+import static ru.praktikum.util.EnvConfig.YA_URL;
 
 public class ClickLogoTests {
     @Rule
     public DriverFactory driverFactory = new DriverFactory();
+
     @Test
-    public void testScooterLogo() {
+    public void scooterLogoTest() {
         WebDriver driver = driverFactory.getDriver();
         MainPage mainPage = new MainPage(driver);
         mainPage.openMainPage();
@@ -24,15 +29,14 @@ public class ClickLogoTests {
         new WebDriverWait(driver, Duration.ofSeconds(EnvConfig.EXPLICIT_TIMEOUT))
                 .until(ExpectedConditions.visibilityOfElementLocated(By.className("Home_Header__iJKdX")));
         String currentUrl = driver.getCurrentUrl();
-        assertEquals("https://qa-scooter.praktikum-services.ru/", currentUrl);
+        assertEquals(BASE_URL, currentUrl);
     }
 
     @Test
-    public void testYandexLogo() {
+    public void yandexLogoTest() {
         WebDriver driver = driverFactory.getDriver();
         MainPage mainPage = new MainPage(driver);
         mainPage.openMainPage();
-        String currHandle = driver.getWindowHandle();
         mainPage.clickOnYandexLogo();
 
         //fetch handles of all windows, there will be two, [0]- default, [1] - new window
@@ -40,7 +44,7 @@ public class ClickLogoTests {
         driver.switchTo().window((String) windowHandles[1]);
         //assert on title of new window
         String currentUrl = driver.getCurrentUrl();
-        assertEquals("https://ya.ru", currentUrl);
+        assertEquals(YA_URL, currentUrl);
         //closing current window
         driver.close();
         //Switch back to the old tab or window
@@ -48,11 +52,12 @@ public class ClickLogoTests {
     }
 
     @Test
-    public void checkOrderNumber() {
+    public void orderNumberTest() {
         WebDriver driver = driverFactory.getDriver();
         MainPage mainPage = new MainPage(driver);
         mainPage.openMainPage();
         mainPage.clickOrderStatusButton();
+        mainPage.enterOrderNumber("12345");
         OrderStatusPage orderStatusPage = mainPage.clickGoButton();
         orderStatusPage.checkError();
     }

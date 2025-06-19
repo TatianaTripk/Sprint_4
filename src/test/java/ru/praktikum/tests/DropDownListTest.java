@@ -12,6 +12,8 @@ import ru.praktikum.pages.MainPage;
 
 import java.time.Duration;
 
+import static ru.praktikum.util.EnvConfig.EXPLICIT_TIMEOUT;
+
 @RunWith(Parameterized.class)
 public class DropDownListTest {
 
@@ -26,7 +28,7 @@ public class DropDownListTest {
     @Rule
     public DriverFactory driverFactory = new DriverFactory();
 
-    @Parameterized.Parameters
+    @Parameterized.Parameters(name = "Тестовые данные: {0}, {1}")
     public static Object[] getData() {
         return new Object[][]{
                 {0, "Сутки — 400 рублей. Оплата курьеру — наличными или картой."},
@@ -41,7 +43,7 @@ public class DropDownListTest {
     }
 
     @Test
-    public void checkAnswerTextMatchesQuestion() {
+    public void dropDownAnswersQuestionsTest() {
         WebDriver driver = driverFactory.getDriver();
         MainPage mainPage = new MainPage(driver);
 
@@ -50,7 +52,7 @@ public class DropDownListTest {
         mainPage.scrollToQuestion(questionIndex);
         mainPage.clickQuestion(questionIndex);
 
-        new WebDriverWait(driver, Duration.ofSeconds(10))
+        new WebDriverWait(driver, Duration.ofSeconds(EXPLICIT_TIMEOUT))
                 .until(ExpectedConditions.visibilityOf(mainPage.getAnswer(questionIndex)));
 
         String actualAnswer = mainPage.getAnswer(questionIndex).getText();

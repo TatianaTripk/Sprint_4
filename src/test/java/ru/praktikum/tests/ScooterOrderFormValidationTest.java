@@ -7,6 +7,7 @@ import org.junit.runners.Parameterized;
 import org.openqa.selenium.WebDriver;
 import ru.praktikum.pages.MainPage;
 import ru.praktikum.pages.OrderPage;
+import ru.praktikum.steps.OrderSteps;
 
 @RunWith(Parameterized.class)
 public class ScooterOrderFormValidationTest {
@@ -39,7 +40,7 @@ public class ScooterOrderFormValidationTest {
     }
 
     // Тестовые данные
-    @Parameterized.Parameters
+    @Parameterized.Parameters(name = "Тестовые данные: {0}, {1}, {2}, {3}, {4}, {5}, {6}, {7}, {8}, {9}, {10}")
     public static Object[][] getCredentials() {
         return new Object[][]{
                 // Тесты на поле "Имя"
@@ -98,9 +99,9 @@ public class ScooterOrderFormValidationTest {
                 // 6 символов (валидно)
                 {"Анна", "Ан", "Поляна", "Кропоткинская", "+78887776655", "22.06.2025", "сутки", "black", "", "Введите корректный адрес", false},
                 // 48  символов(валидно)
-                {"Анна", "Ан", "ПолянаПолянаПолянаПолянаПолянаПолянаПолянаПолянаПолянаорп", "Кропоткинская", "+78887776655", "22.06.2025", "сутки", "black", "", "Введите корректный адрес", false},
+                {"Анна", "Ан", "ПолянаПолянаПолянаПолянаПолянаПолянаПолянаПоляна", "Кропоткинская", "+78887776655", "22.06.2025", "сутки", "black", "", "Введите корректный адрес", false},
                 // 49  символов(валидно)
-                {"Анна", "Ан", "ПолянаПолянаПолянаПолянаПолянаПолянаПолянаПолянаПолянаорпа", "Кропоткинская", "+78887776655", "22.06.2025", "сутки", "black", "", "Введите корректный адрес", false},
+                {"Анна", "Ан", "ПолянаПолянаПолянаПолянаПолянаПолянаПолянаПолянаП", "Кропоткинская", "+78887776655", "22.06.2025", "сутки", "black", "", "Введите корректный адрес", false},
 
                 // Тесты на поле "Телефон"
                 // не заполнено(невалидно)
@@ -126,15 +127,15 @@ public class ScooterOrderFormValidationTest {
     }
 
     @Test
-    public void errorsTestOrder() throws InterruptedException {
+    public void scooterOrderFormValidationTest() {
         WebDriver driver = driverFactory.getDriver();
         MainPage mainPage = new MainPage(driver);
         mainPage.openMainPage();
         mainPage.closeCookiePopup();
         OrderPage orderPage = mainPage.clickUpperOrderButton();
-        orderPage.fillFirstForm(firstName, lastName, address, metroStation, phoneNumber);
+        OrderSteps orderSteps = new OrderSteps(orderPage, driver);
+        orderSteps.fillFirstForm(firstName, lastName, address, metroStation, phoneNumber);
         orderPage.clickOrderHeader();
-        orderPage.assertValidation(expectedError, deliveryDate, rentalPeriod, scooterColour, comment);
+        orderSteps.assertValidation(expectedError, deliveryDate, rentalPeriod, scooterColour, comment, shouldShowError);
     }
-
 }

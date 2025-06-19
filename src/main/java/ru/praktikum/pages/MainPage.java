@@ -22,9 +22,13 @@ public class MainPage {
     private final By samokatLogo = By.xpath("//img[@src='/assets/scooter.svg' and @alt='Scooter']");
     // Логотип Яндекса
     private final By yandexLogo = By.xpath("//img[@src='/assets/ya.svg' and @alt='Yandex']");
+    // Кнопка "Статус заказа"
     private final By orderStatusButton = By.cssSelector(".Header_Link__1TAG7");
+    // Поле ввода номера заказа
     private final By orderNumberField = By.cssSelector((".Input_Input__1iN_Z.Header_Input__xIoUq"));
+    // Кнопка "Go!"
     private final By goButton = By.cssSelector(".Button_Button__ra12g.Header_Button__28dPO");
+
     private WebDriver driver;
 
     public MainPage(WebDriver driver) {
@@ -106,10 +110,11 @@ public class MainPage {
     }
 
     // Метод, который вводит номер заказа в поле
-    public void enterOrderNumber() {
-        driver.findElement(orderNumberField).sendKeys("12345");
+    public void enterOrderNumber(String order) {
+        driver.findElement(orderNumberField).sendKeys(order);
     }
 
+    // Метод, клиткающий на кнопку Go!
     public OrderStatusPage clickGoButton() {
         driver.findElement(goButton).click();
         return new OrderStatusPage(driver);
