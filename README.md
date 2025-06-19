@@ -1,4 +1,4 @@
-# Sprint_3
+# Sprint_4
 Для запуска тестов в браузере Mozilla Firefox использовать такую команду в терминале:
 mvn clean test -Dbrowser=firefox
 
